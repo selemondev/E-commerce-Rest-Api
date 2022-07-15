@@ -24,6 +24,19 @@ const protect = asyncHandler( async ( req, res ) => {
     }
 });
 
+
+const protectAdmin = asyncHandler( async (req, res, next) => {
+    protect(req, res, () => {
+        if( req.user.isAdmin) {
+            next()
+        } else {
+            res.status(401);
+            throw new Error("You must be an admin to access this page")
+        }
+    })
+})
+
 module.exports = {
-    protect
+    protect,
+    protectAdmin
 }
