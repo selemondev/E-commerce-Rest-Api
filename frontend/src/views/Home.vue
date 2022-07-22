@@ -1,19 +1,28 @@
 <script setup>
 import { useProductStore } from '../stores/productStore';
 import { ref, watchEffect } from 'vue';
+import Loader from '../components/Loader.vue';
 const store = useProductStore();
+const loading = ref("")
 const products = ref([]);
 watchEffect(() => {
-  store.fetchProducts()
+  store.fetchProducts();
   products.value = store.products;
 });
+
+watchEffect(() => {
+    loading.value = store.loadingProducts;
+})
 console.log(products.value);
 </script>
 
 <template>
   <main class="mt-4">
-   <div class="flex items-center flex-wrap">
-    <div v-for="product in products[0]"  :key="product.title" class="bg-gray-100 rounded-md w-64 h-92 space-y-2 py-2 px-4 m-5">
+    <div v-if="loading">
+    <Loader/>
+    </div>
+   <div class="flex items-center flex-wrap" v-else>
+    <div v-for="product in products[0]"  :key="product.title" class="bg-gray-100 rounded-md w-64 h-92 space-y-2 py-2 px-4 m-8">
     <div>
       <img :src="product.image" :alt="products.title" class="w-full h-48 rounded-md">
     </div>
