@@ -5,6 +5,7 @@ export const useProductStore = defineStore({
    id: "product",
    state: () => ({
     products: [],
+    loadingProducts: null,
    }),
 
    getters: {
@@ -12,7 +13,9 @@ export const useProductStore = defineStore({
    },
    actions: {
     async fetchProducts() {
+        this.loadingProducts = true;
         const response = await axios.get(getAllProducts);
+        this.loadingProducts = false;
         this.products.push(response.data)
     }
    }
