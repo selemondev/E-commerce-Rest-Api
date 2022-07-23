@@ -44,37 +44,10 @@ const deleteProduct = asyncHandler( async( req, res) => {
     }
 });
 
-const findProduct = asyncHandler( async ( req, res ) => {
-    const product = await Products.findById( req.params.id );
-
-    if ( !product ) {
-        res.status(404);
-        throw new Error(" Product not found ");
-    } else {
-        res.status(200).json(product);
-    }
-});
-
-// we either get all the products, get new products or get products by category
 const getAllProducts = asyncHandler( async ( req, res ) => {
-    const newProduct = req.query.new;
-    const category = req.query.category;
-
     try {
         let products;
-        
-        if( newProduct ) {
-            products = await Products.find().sort({ createdAt: -1}).limit(1)
-        } else if ( category) {
-            products = await Products.find({
-                categories: {
-                    $in: [category]
-                }
-            })
-        } else {
-            products = await Products.find();
-        }
-        
+        products = await Products.find();
         res.status(200).json(products)
 
     } catch(error) {
@@ -87,6 +60,5 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
-    findProduct,
     getAllProducts,
 }
